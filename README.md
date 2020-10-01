@@ -1,4 +1,4 @@
-# LottoAnalysis-
+# LottoAnalysis
 (玩具)-台灣彩券基於歷史開獎紀錄的開獎號碼預測
 
 這是為了滿足家父願望的一個玩具程式。
