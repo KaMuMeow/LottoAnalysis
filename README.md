@@ -6,15 +6,27 @@
 
 對於txt的載入格式範例(load txt content example)
 由上至下的排序是舊>新(sort is old to new)
+
 Number:09,10,15,27,32,#
+
 Number:03,09,14,26,33,#
+
 Number:08,18,23,24,31,#
+
 Number:13,20,26,37,38,#
+
 Number:04,23,25,35,38,#
+
 Number:03,09,24,35,38,#
+
 Number:06,07,09,21,32,#
+
 Number:12,29,31,36,39,#
+
 Number:04,17,24,25,28,#
+
 Number:02,12,17,34,38,#
+
 Number:19,20,25,30,37,#
+
 Number:01,04,07,08,39,#
