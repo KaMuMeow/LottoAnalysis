@@ -42,7 +42,7 @@ namespace LottoAnalysis
             }
 
             //用來分析準確度使用，若沒有要分析準確度則不管她
-            if(Text_FutureNumber.Text!="")
+            if (Text_FutureNumber.Text != "")
             {
                 string[] Tmp = Text_FutureNumber.Text.Split(',');
                 Future = new int[Tmp.Length];
@@ -50,7 +50,7 @@ namespace LottoAnalysis
                     Future[i] = int.Parse(Tmp[i]);
             }
 
-            NumberList = new NumberBall[NumberSum+1];
+            NumberList = new NumberBall[NumberSum + 1];
             for (int i = 0; i <= NumberSum; i++)
             {
                 NumberList[i] = new NumberBall();
@@ -59,13 +59,13 @@ namespace LottoAnalysis
             StreamReader Read = new StreamReader(openFileDialog1.FileName);
             int Serial = 0;//紀錄目前期數
             string s = "";
-            int TmpCount=0;
+            int TmpCount = 0;
             while (Read.Peek() != -1)
             {
                 s = Read.ReadLine();
                 NumberSerial[TmpCount] = s;
                 TmpCount++;
-                if(TmpCount==NumberSerial.Length)
+                if (TmpCount == NumberSerial.Length)
                 {
                     Array.Resize(ref NumberSerial, NumberSerial.Length + 100);
                 }
@@ -90,26 +90,21 @@ namespace LottoAnalysis
                 {
                     Serial++;
                     s = s.Substring(s.IndexOf(":") + 1, s.Length - s.IndexOf(":") - 1);
-                    string[] result = s.Split(',');
-                    for (int x = 0; x < result.Length - 1; x++)
+                    string[] result = s.Replace("#", "").Split(',');
+                    for (int x = 0; x < result.Length; x++)
                     {
-                        if (result[x] == "#")
-                            break;
+                        int Tmps = int.Parse(result[x]);
+                        NumberList[Tmps].sum++;
+                        if (NumberList[Tmps].lastFound == 0)
+                        {
+                            //若還沒出現週期則記錄下來
+                            NumberList[Tmps].lastFound = Serial;
+                        }
                         else
                         {
-                            int Tmps = int.Parse(result[x]);
-                            NumberList[Tmps].sum++;
-                            if (NumberList[Tmps].lastFound == 0)
-                            {
-                                //若還沒出現週期則記錄下來
-                                NumberList[Tmps].lastFound = Serial;
-                            }
-                            else
-                            {
-                                //將最後出現的週期與現在的週期相減，放入週期序列內
-                                NumberList[Tmps].Cycle((Serial - NumberList[Tmps].lastFound).ToString());
-                                NumberList[Tmps].lastFound = Serial;
-                            }
+                            //將最後出現的週期與現在的週期相減，放入週期序列內
+                            NumberList[Tmps].Cycle((Serial - NumberList[Tmps].lastFound).ToString());
+                            NumberList[Tmps].lastFound = Serial;
                         }
                     }
                 }
@@ -118,7 +113,7 @@ namespace LottoAnalysis
             int TmpMaxSum = NumberList[1].sum;
             int TmpMinSum = NumberList[1].sum;
             //更新最後一次出現的位置
-            for(int i=1; i<=NumberSum;i++)
+            for (int i = 1; i <= NumberSum; i++)
             {
                 //順便計算所有次數的加總
                 TmpAverage += NumberList[i].sum;
@@ -131,7 +126,7 @@ namespace LottoAnalysis
             }
             TmpAverage /= NumberSum;
             //將加總平均值放入給每一顆球
-            for(int i=1;i<NumberSum;i++)
+            for (int i = 1; i < NumberSum; i++)
             {
                 NumberList[i].averageSum = TmpAverage;
             }
@@ -144,22 +139,22 @@ namespace LottoAnalysis
                 int number = NumberList[i].analysis();
                 if (number != 0 && NumberList[i].lastFound - Serial != 0)
                 {
-                    Show_Result.Items.Add( number.ToString("00")+"號" + " 出現次數為: " + NumberList[i].sum);
+                    Show_Result.Items.Add(number.ToString("00") + "號" + " 出現次數為: " + NumberList[i].sum);
                     count++;
-                    if(Future!=null)
-                    for(int x=0;x<Future.Length;x++)
-                    {
-                        if (Future[x] == number)
-                            TmpCount++;
+                    if (Future != null)
+                        for (int x = 0; x < Future.Length; x++)
+                        {
+                            if (Future[x] == number)
+                                TmpCount++;
 
-                    }
+                        }
                 }
                 else
                 {
                     NumberList[i].Last = true;
                 }
             }
-            
+
             Show_AverageSum.Text = TmpAverage.ToString();
             Show_MaxSum.Text = TmpMaxSum.ToString();
             Show_MinSum.Text = TmpMinSum.ToString();
@@ -170,7 +165,7 @@ namespace LottoAnalysis
 
         private void Btn_Open_Click(object sender, EventArgs e)
         {
-            DialogResult YesOrNo =  openFileDialog1.ShowDialog();
+            DialogResult YesOrNo = openFileDialog1.ShowDialog();
             if (YesOrNo == DialogResult.OK)
             {
                 Start_Analysis();
@@ -185,14 +180,14 @@ namespace LottoAnalysis
         private void Show_Result_SelectedIndexChanged(object sender, EventArgs e)
         {
             //顯示數字的週期
-            if(Show_Result.SelectedIndex!=-1)
+            if (Show_Result.SelectedIndex != -1)
             {
                 Show_Cycle.Items.Clear();
                 //取出要看的號碼
                 int tmpNumber = int.Parse(Show_Result.SelectedItem.ToString().Substring(0, 2));
-                foreach(int C in NumberList[tmpNumber].GetCycle())
+                foreach (int C in NumberList[tmpNumber].GetCycle())
                 {
-                    if(C!=0)
+                    if (C != 0)
                     {
                         Show_Cycle.Items.Add(C);
                     }
